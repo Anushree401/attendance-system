@@ -1,20 +1,25 @@
 import sqlite3
-import sqlite3
-from datetime  import datetime 
-from app.models.subject import Subject 
-from app.models.attendance_record import AttendanceRecord 
+from datetime import datetime
+from app.models.subject import Subject
+from app.models.attendance_record import AttendanceRecord
 
+def get_db_path():
+    try:
+        import toga
+        app = toga.App.app
+        if app:
+            # This is the magic line for Android: saves the DB into the app's internal sandbox
+            return str(app.paths.data / "attendance.db")
+    except Exception:
+        pass
+    return "attendance.db"
 
-DB_NAME = "attendance.db" 
-
-
-def get_connection(db_path=DB_NAME):
-    conn = sqlite3.connect(db_path)
+def get_connection(db_path=None):
+    conn = sqlite3.connect(db_path or get_db_path())
     conn.row_factory = sqlite3.Row 
     return conn 
 
-
-def init_db(db_path=DB_NAME):
+def init_db(db_path=None):
     conn = get_connection(db_path)
     cursor = conn.cursor()
     cursor.execute('''
@@ -38,8 +43,7 @@ def init_db(db_path=DB_NAME):
     conn.commit()
     conn.close()
 
-
-def add_subject(name:str,total_projected_classes:int,db_path=DB_NAME) -> int:
+def add_subject(name:str,total_projected_classes:int,db_path=None) -> int:
     conn = get_connection(db_path)
     cursor = conn.cursor()
     cursor.execute('''
@@ -50,8 +54,7 @@ def add_subject(name:str,total_projected_classes:int,db_path=DB_NAME) -> int:
     conn.close()
     return subject_id 
 
-
-def get_all_subjects(db_path=DB_NAME) -> list[Subject]:
+def get_all_subjects(db_path=None) -> list[Subject]:
     conn = get_connection(db_path)
     cursor = conn.cursor()
     cursor.execute('select * from subjects')
@@ -68,8 +71,7 @@ def get_all_subjects(db_path=DB_NAME) -> list[Subject]:
         ))
     return subjects 
 
-
-def get_subject_by_id(subject_id:int,db_path=DB_NAME) -> Subject:
+def get_subject_by_id(subject_id:int,db_path=None) -> Subject:
     conn = get_connection(db_path)
     cursor = conn.cursor() 
     cursor.execute('select * from subjects where id = ?',(subject_id,))
@@ -85,8 +87,7 @@ def get_subject_by_id(subject_id:int,db_path=DB_NAME) -> Subject:
         )
     return None
 
-
-def log_attendance(subject_id:int,status:str,date_recorded:str=None,db_path=DB_NAME):
+def log_attendance(subject_id:int,status:str,date_recorded:str=None,db_path=None):
     if status.lower() not in ['present','absent']:
         raise ValueError("Status must be 'present' or 'absent'")
     if date_recorded is None:
@@ -112,8 +113,7 @@ def log_attendance(subject_id:int,status:str,date_recorded:str=None,db_path=DB_N
     finally:
         conn.close()
 
-
-def get_attendance_log(subject_id:int,db_path=DB_NAME) -> list[AttendanceRecord]:
+def get_attendance_log(subject_id:int,db_path=None) -> list[AttendanceRecord]:
     conn = get_connection(db_path)
     cursor = conn.cursor()
     cursor.execute('select * from attendance_logs where subject_id = ? order by date_recorded desc',(subject_id,))
@@ -128,4 +128,4 @@ def get_attendance_log(subject_id:int,db_path=DB_NAME) -> list[AttendanceRecord]
             date_recorded=date_obj,
             status=row['status']
         ))
-    return logs 
+    return logs

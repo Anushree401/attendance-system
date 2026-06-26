@@ -62,18 +62,51 @@ $$R = M - A$$
 
 Because the application must run entirely offline on an Android device without a persistent Docker server on a PC, the tools are selected for cross-compilation capability:
 
-* **Frontend UI Framework:** **Kivy** or **KivyMD** (Material Design components for Kivy). This allows you to write the user interface completely in Python using `.kv` layout design files that translate seamlessly to mobile touch screens.
+* **Frontend UI Framework:** **BeeWare** with **Toga**. This allows you to build the user interface completely in Python using a native, cross-platform toolkit that works well for Android and desktop development.
 * **Data Extraction Engine:** **pdfplumber** or **PyPDF2** for native text-based PDFs (lightweight, rapid processing). If the timetables are scanned images, an ARM-compiled implementation of **Tesseract OCR** via `pytesseract` is required.
 * **Local Database:** **SQLite** (using Python's native `sqlite3` standard library). It reads and writes directly to a single file stored securely within the app's internal sandbox storage on Android.
-* **Compilation Toolchain:** **Buildozer**. A command-line tool that automates the compilation of Python code, libraries, and the Python interpreter itself into a standard Android package binaries architecture.
+* **Compilation Toolchain:** **BeeWare** tooling for packaging and deployment, with Toga for the app UI and native cross-platform support.
 
 ---
 
-## E. Downloading and Deploying the App
+## E. Project Structure
+
+A starter folder structure for the app could look like this:
+
+```text
+attendance-system/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── models/
+│   │   ├── __init__.py
+│   │   ├── subject.py
+│   │   └── attendance_record.py
+│   ├── services/
+│   │   ├── __init__.py
+│   │   ├── parser.py
+│   │   ├── attendance_logic.py
+│   │   └── storage.py
+│   ├── ui/
+│   │   ├── __init__.py
+│   │   └── main_window.py
+│   └── utils/
+│       ├── __init__.py
+│       └── helpers.py
+├── data/
+│   └── sample_timetables/
+├── tests/
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## F. Downloading and Deploying the App
 
 Since this is a custom, private utility built entirely by you, it will bypass the Google Play Store and be deployed locally:
 
-1. **Develop Locally:** You write and debug the Python source files (`main.py`, database models, and Kivy configurations) on your development computer.
+1. **Develop Locally:** You write and debug the Python source files (`main.py`, database models, and Toga UI code) on your development computer.
 2. **Compile into an APK:** You run Buildozer inside a Linux terminal or a Docker container on your computer via the command:
 ```bash
 buildozer android debug

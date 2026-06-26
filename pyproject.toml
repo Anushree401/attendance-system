@@ -1,0 +1,33 @@
+[tool.briefcase]
+project_name = "Attendance Forecaster"
+bundle = "org.beeware"
+version = "1.0.0"
+url = "https://example.com/attendance"
+license = "MIT"
+author = "You"
+author_email = "developer@example.com"
+
+[tool.briefcase.app.app]
+formal_name = "Attendance Forecaster"
+description = "A privacy-centric local attendance tracker."
+icon = "briefcase"
+sources = ["app"]
+requires = [
+    "toga>=0.4.0",
+    "pypdf",
+]
+
+[tool.briefcase.app.app.macOS]
+requires = ["toga-cocoa>=0.4.0"]
+
+[tool.briefcase.app.app.linux]
+requires = ["toga-gtk>=0.4.0"]
+
+[tool.briefcase.app.app.windows]
+requires = ["toga-winforms>=0.4.0"]
+
+[tool.briefcase.app.app.iOS]
+requires = ["toga-iOS>=0.4.0"]
+
+[tool.briefcase.app.app.android]
+requires = ["toga-android>=0.4.0"]

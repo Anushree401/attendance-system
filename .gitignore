@@ -1,1 +1,25 @@
 plan.md
+android_apk.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# BeeWare / Briefcase build artifacts
+build/
+dist/
+
+# Briefcase logs
+logs/
+*.log
+
+# Local Database (keep your attendance private and out of Git!)
+attendance.db
+*.sqlite3
+
+# Virtual Environments
+.env
+.venv
+venv/
+env/

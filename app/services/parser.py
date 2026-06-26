@@ -4,6 +4,18 @@ from pypdf import PdfReader
 from app.services.storage import add_subject
 
 
+def parse_timetable_text(text: str):
+    subjects_extracted = extract_from_lines(text.split('\n'))
+    if not subjects_extracted:
+        print("No subjects found to parse.")
+        return False
+        
+    for name, total_classes in subjects_extracted:
+        add_subject(name, total_classes)
+        
+    return True
+
+
 def parse_timetable(file_path: str):
     subjects_extracted = []
     if file_path.endswith('.txt'):

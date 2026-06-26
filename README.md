@@ -107,12 +107,12 @@ attendance-system/
 Since this is a custom, private utility built entirely by you, it will bypass the Google Play Store and be deployed locally:
 
 1. **Develop Locally:** You write and debug the Python source files (`main.py`, database models, and Toga UI code) on your development computer.
-2. **Compile into an APK:** You run Buildozer inside a Linux terminal or a Docker container on your computer via the command:
+2. **Compile into an APK:** You use Briefcase (BeeWare's packaging tool) on your computer via the commands:
 ```bash
-buildozer android debug
-
+briefcase create android
+briefcase build android
+briefcase package android
 ```
 
-
-3. **Transfer the File:** This generation process creates an installer file named something like `attendance_forecaster-1.0-debug.apk` inside your project's `bin/` directory. You transfer this file to your phone via USB cable, Google Drive, or a local network share.
+3. **Transfer the File:** This generation process creates an installer file (an `.apk`) inside your project's `build/` directory. You transfer this file to your phone via USB cable, Google Drive, or a local network share.
 4. **Install on Android:** Open the file manager application on your phone, locate the transferred `.apk` file, and tap it. Your phone will prompt you to allow **"Installation from Unknown Sources"** (since it is a self-signed developer build). Once approved, the application installs directly onto your phone dashboard, ready for completely offline usage.
